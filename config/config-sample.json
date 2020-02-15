@@ -4,6 +4,7 @@
     "password": "",
     "database": "ideDB",
     "host": "localhost",
+    "port": 5432,
     "dialect": "postgres",
     "clientId":"6469017951",
     "clientSecret":"",
@@ -15,6 +16,14 @@
       "endpoint": "minio.xyz.com",
       "accessKey": "miniokeyhere",
       "secretKey": "changeme"
+    },
+    "judge": {
+      "apiBase": "http://judge.cb.lk/api",
+      "apiKey": "123",
+      "callback": "http://89c879cf.ngrok.io"
+    },
+    "api": {
+      "apiBase": "http://89c879cf.ngrok.io"
     }
   },
   "test": {
