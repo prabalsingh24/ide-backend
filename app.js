@@ -33,7 +33,7 @@ app.post ('*', U.setCorsHeaders)
 app.patch ('*', U.setCorsHeaders)
 app.options ('*', U.setCorsHeaders)
 
-app.use(U.checkRequestOrigin)
+// app.use(U.checkRequestOrigin)
 
 passport.initialize()
 app.use (express.static (path.join (__dirname, 'public')));
