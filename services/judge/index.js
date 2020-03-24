@@ -15,7 +15,6 @@ module.exports = {
       }
     }),
   runCode: ({ source, lang, input }) =>
-    console.log(config.api.apiBase + "/run/cb") ||
     rp({
       method: "POST",
       uri: uri("/runs"),

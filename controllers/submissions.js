@@ -10,7 +10,10 @@ module.exports = {
 
       const { id } = await services.runCode({ source, lang, input });
 
-      await models.submission.create({ id, user_id: req.user && req.user.id });
+      await models.submission.create({ 
+        judge_id: id, 
+        user_id: req.user && req.user.id 
+      });
 
       res.send({ id });
     } catch (err) {
@@ -20,7 +23,11 @@ module.exports = {
   },
   get: async (req, res, next) => {
     try {
-      const submission = await models.submission.findOne({ where: { id: req.params.submission_id } });
+      const submission = await models.submission.findOne({ 
+        where: {
+          judge_id: req.params.submission_id
+        } 
+      });
 
       if (!submission) {
         return res.status(404).send({ error: { message: "Submission not found." } });
@@ -36,12 +43,16 @@ module.exports = {
     try {
       const { id, code, outputs } = req.body;
 
-      const [updated] = await models.submission.update(
-        { outputs, is_completed: true, is_successful: code === 200 },
-        {
-          where: { id, is_completed: false }
+      const [updated] = await models.submission.update({ 
+        outputs, 
+        is_completed: true, 
+        is_successful: code === 200 
+      }, {
+        where: { 
+          judge_id: id, 
+          is_completed: false 
         }
-      );
+      });
 
       if (!updated) {
         return res.status(404).send({ error: { message: "Submission not found." } });
