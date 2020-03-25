@@ -3,3 +3,4 @@ node_modules/*
 util/environment.sh
 ecosystem.config.js
 config.json
+*.swp
