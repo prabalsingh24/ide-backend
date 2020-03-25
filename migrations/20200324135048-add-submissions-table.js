@@ -8,10 +8,6 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
-      judge_id: {
-        type: Sequelize.BIGINT,
-        allowNull: false
-      },
       is_completed: {
         type: Sequelize.BOOLEAN,
         defaultValue: false
