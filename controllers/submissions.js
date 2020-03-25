@@ -1,5 +1,6 @@
 const models = require("../models");
 const services = require("../services/judge/");
+const config = require('../config/config.json')[process.env.NODE_ENV || "development"]
 
 module.exports = {
   post: async (req, res, next) => {
@@ -41,6 +42,10 @@ module.exports = {
   },
   done: async (req, res, next) => {
     try {
+      console.log(req.query.code)
+      if (req.query.code !== config.judge.secret) {
+        return res.sendStatus(403);
+      }
       const { id, code, outputs } = req.body;
 
       const [updated] = await models.submission.update({ 

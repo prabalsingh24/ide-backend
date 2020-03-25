@@ -27,7 +27,7 @@ module.exports = {
         lang,
         stdin: input,
         mode: "callback",
-        callback: config.api.apiBase + "/run/cb"
+        callback: config.api.apiBase + "/run/cb?code=" + config.judge.secret
       }
     })
 };

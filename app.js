@@ -10,6 +10,7 @@ const index = require ('./routes/index');
 const users = require ('./routes/users');
 const code = require ('./routes/code');
 const run = require ('./routes/run');
+const submissions = require('./controllers/submissions');
 
 const U = require ('./util/util');
 const secrets = require('./config/config.json')[process.env.NODE_ENV || 'development'];
@@ -33,16 +34,18 @@ app.post ('*', U.setCorsHeaders)
 app.patch ('*', U.setCorsHeaders)
 app.options ('*', U.setCorsHeaders)
 
-// app.use(U.checkRequestOrigin)
 
 passport.initialize()
 app.use (express.static (path.join (__dirname, 'public')));
 app.use (express.static (path.join (__dirname, '.well-known')));
 
+app.post("/run/cb", submissions.done);
+
+app.use(U.checkRequestOrigin)
 app.use ('/', index);
+app.use ('/run', run);
 app.use ('/users', users);
 app.use ('/code', code);
-app.use ('/run', run);
 
 app.use ('/.well-known', express.static (path.join (__dirname, '.well-known')));
 
