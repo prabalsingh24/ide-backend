@@ -20,6 +20,13 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true
       },
+      userId: {
+        type: Sequelize.BIGINT,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false
