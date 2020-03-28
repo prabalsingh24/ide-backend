@@ -1,4 +1,5 @@
 const express = require ('express'),
+  Raven = require('raven'),
   U = require('../util/util'),
   DB = require ('../models'),
   passport = require('passport'),
@@ -24,64 +25,77 @@ router.get('/', passport.authenticate('bearer', {session: false}), (req, res, ne
       count,
       codes: rows
     })
+  }).catch(err => {
+    Raven.captureException(err)
+    res.sendStatus(500)
   })
 })
 
 router.get ('/:id', async (req, res, next) => {
-  let dbCode = await DB.code.findById(req.params.id, {
-    attributes: ['id', 'title', 'language', ['custom_input', 'customInput'], ['file_name', 'fileName'] ]
-  })
-
-  //get code from minio
-  const stream = await minio.getObject(config.minio.bucket, dbCode.id + '/code.txt')
+  try {
+    let dbCode = await DB.code.findById(req.params.id, {
+      attributes: ['id', 'title', 'language', ['custom_input', 'customInput'], ['file_name', 'fileName'] ]
+    })
   
-  dbCode = dbCode.get({plain: true})
-  // extract complete code from stream
-  dbCode.code = await U.getDataFromStream(stream)
-
-  res.json (dbCode)
+    //get code from minio
+    const stream = await minio.getObject(config.minio.bucket, dbCode.id + '/code.txt')
+    
+    dbCode = dbCode.get({plain: true})
+    // extract complete code from stream
+    dbCode.code = await U.getDataFromStream(stream)
+  
+    res.json (dbCode)
+  } catch (err) {
+    Raven.captureException(err)
+    res.sendStatus(500)
+  }
 })
 
 
 router.post('/', U.authenticateOrPass, async (req, res, next) => {
-  const {id, language, code, customInput, filename} = req.body
-  const title = req.body.title || 'Untitled'
-
-  if (id && req.user.id) {
-    // we have a codeId and user is authenticated -> we can update this code 
-    // instead of creating a new one
-
-    //check if this code belongs to current user
-    let dbCode = await DB.code.findById(id)
-    if (dbCode && dbCode.userId === req.user.id) {
-      dbCode.set("language", language)
-      dbCode.set("code", code)
-      dbCode.set("custom_input", customInput)
-      dbCode.set("file_name", filename)
-      dbCode.set("title", title)
-      await dbCode.save()
-      // save to minio
-      await minio.putObject(config.minio.bucket, dbCode.id + '/code.txt', code)
-      return res.json(dbCode)
-    }
-  }
-
-
-  // else just create a new one
-  dbCode = await DB.code.create({
-    language,
-    title,
-    code: '',
-    custom_input: customInput,
-    file_name: filename,
-    userId: req.user ? req.user.id : null
-  }, {
-    returning: true
-  })
+  try {
+    const {id, language, code, customInput, filename} = req.body
+    const title = req.body.title || 'Untitled'
   
-  await minio.putObject(config.minio.bucket, dbCode.id + '/code.txt' , code)
-
-  res.json(dbCode)
+    if (id && req.user.id) {
+      // we have a codeId and user is authenticated -> we can update this code 
+      // instead of creating a new one
+  
+      //check if this code belongs to current user
+      let dbCode = await DB.code.findById(id)
+      if (dbCode && dbCode.userId === req.user.id) {
+        dbCode.set("language", language)
+        dbCode.set("code", code)
+        dbCode.set("custom_input", customInput)
+        dbCode.set("file_name", filename)
+        dbCode.set("title", title)
+        await dbCode.save()
+        // save to minio
+        await minio.putObject(config.minio.bucket, dbCode.id + '/code.txt', code)
+        return res.json(dbCode)
+      }
+    }
+  
+  
+    // else just create a new one
+    dbCode = await DB.code.create({
+      language,
+      title,
+      code: '',
+      custom_input: customInput,
+      file_name: filename,
+      userId: req.user ? req.user.id : null
+    }, {
+      returning: true
+    })
+    
+    await minio.putObject(config.minio.bucket, dbCode.id + '/code.txt' , code)
+  
+    res.json(dbCode)
+  } catch (err) {
+    Raven.captureException(err)
+    res.sendStatus(500)
+  }
 })
 
 module.exports = router;

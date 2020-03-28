@@ -1,3 +1,4 @@
+const Raven = require('raven');
 const services = require('../services/judge/');
 
 module.exports = {
@@ -5,8 +6,7 @@ module.exports = {
     try {
       res.json(await services.getLangs());
     } catch (err) {
-      console.log(err);
-
+      Raven.captureException(err)
       return next(err);
     }
   },

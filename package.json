@@ -24,6 +24,7 @@
     "passport-http-bearer": "^1.0.1",
     "pg": "^7.0.3",
     "pg-hstore": "^2.3.2",
+    "raven": "^2.6.4",
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.37.10",

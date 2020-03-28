@@ -1,3 +1,4 @@
+const Raven = require('raven');
 const request = require('request-promise');
 const secrets    = require('../config/config.json')[process.env.NODE_ENV || 'development'];
 const models = require('../models');
@@ -56,11 +57,11 @@ module.exports = {
         });
         res.json({"token":tokenrow[0].clienttoken});
       } catch (error) {
-        console.error(error)
+        Raven.captureException(err)
         res.status(401).send("Unauthorised");
       }
     } catch (error) {
-      console.error(error)
+      Raven.captureException(err)
       res.status(401).send("Unauthorised");
     }
   },
@@ -83,7 +84,7 @@ module.exports = {
       })
       res.status(200).send("success");
     } catch (error) { 
-      console.log(err);
+      Raven.captureException(err)
       res.status(500).send("Server Error")
     }
   }

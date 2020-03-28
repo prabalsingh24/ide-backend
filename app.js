@@ -1,4 +1,5 @@
 const nr = require('newrelic');
+const Raven = require('raven');
 const express = require ('express');
 const path = require ('path');
 const favicon = require ('serve-favicon');
@@ -17,9 +18,12 @@ const U = require ('./util/util');
 const secrets = require('./config/config.json')[process.env.NODE_ENV || 'development'];
 
 const app = express ();
+Raven.config(secrets.sentrDSN)
+
+// Sentry setup
+app.use(Raven.requestHandler());
 
 // view engine setup
-
 app.set ('views', path.join (__dirname, 'views'));
 app.set ('view engine', 'jade');
 
@@ -58,6 +62,7 @@ app.use (function (req, res, next) {
 });
 
 // error handler
+app.use(Raven.errorHandler());
 app.use (function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

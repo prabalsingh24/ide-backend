@@ -1,3 +1,4 @@
+const Raven = require('raven');
 const models = require("../models");
 const services = require("../services/judge/");
 const config = require('../config/config.json')[process.env.NODE_ENV || "development"]
@@ -18,7 +19,7 @@ module.exports = {
 
       res.send({ id });
     } catch (err) {
-      console.log(err);
+      Raven.captureException(err)
       next(err);
     }
   },
@@ -36,7 +37,7 @@ module.exports = {
 
       res.send(submission);
     } catch (err) {
-      console.log(err);
+      Raven.captureException(err)
       next(err);
     }
   },
@@ -65,7 +66,7 @@ module.exports = {
 
       return res.send({ success: true });
     } catch (err) {
-      console.log(err);
+      Raven.captureException(err)
       next(err);
     }
   }
