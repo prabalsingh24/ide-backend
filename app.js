@@ -18,7 +18,7 @@ const U = require ('./util/util');
 const secrets = require('./config/config.json')[process.env.NODE_ENV || 'development'];
 
 const app = express ();
-Raven.config(secrets.sentrDSN)
+Raven.config(secrets.sentrDSN).install()
 
 // Sentry setup
 app.use(Raven.requestHandler());
