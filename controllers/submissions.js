@@ -64,7 +64,7 @@ module.exports = {
       const [updated] = await models.submission.update({ 
         outputs: [result.url], 
         is_completed: true, 
-        is_successful: code === 0 
+        is_successful: !stderr
       }, {
         where: { 
           judge_id: id, 
