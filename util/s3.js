@@ -1,10 +1,10 @@
 const Minio = require('minio')
 const v4 =  require('uuid/v4')
 const axios = require('axios')
-const config = require('../../config')
+const config = require('../config/config.json')[process.env.NODE_ENV || 'development' ]
 
 const client = new Minio.Client({
-  endPoint: config.S3.endpoint,
+  endPoint: config.S3.endPoint,
   port: +config.S3.port,
   useSSL: !!config.S3.ssl,
   accessKey: config.S3.accessKey,
