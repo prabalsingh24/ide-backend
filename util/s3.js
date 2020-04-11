@@ -6,7 +6,7 @@ const config = require('../config/config.json')[process.env.NODE_ENV || 'develop
 const client = new Minio.Client({
   endPoint: config.S3.endPoint,
   port: +config.S3.port,
-  useSSL: !!config.S3.ssl,
+  useSSL: !!config.S3.useSSL,
   accessKey: config.S3.accessKey,
   secretKey: config.S3.secretKey,
   region: config.S3.region
