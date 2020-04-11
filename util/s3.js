@@ -12,7 +12,7 @@ const client = new Minio.Client({
   region: config.S3.region
 })
 
-const urlForFilename = (bucket, filename) => `http${config.S3.ssl ? 's': ''}://${config.S3.endpoint}/${bucket}/${filename}`
+const urlForFilename = (bucket, filename) => `http${config.S3.ssl ? 's': ''}://${config.S3.endPoint}/${bucket}/${filename}`
 
 /**
  * Uploads an object to s3 encoded as json
