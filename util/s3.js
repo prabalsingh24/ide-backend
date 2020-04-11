@@ -12,7 +12,7 @@ const client = new Minio.Client({
   region: config.S3.region
 })
 
-export const urlForFilename = (bucket, filename) => `http${config.S3.ssl ? 's': ''}://${config.S3.endpoint}/${bucket}/${filename}`
+const urlForFilename = (bucket, filename) => `http${config.S3.ssl ? 's': ''}://${config.S3.endpoint}/${bucket}/${filename}`
 
 /**
  * Uploads an object to s3 encoded as json
@@ -21,7 +21,7 @@ export const urlForFilename = (bucket, filename) => `http${config.S3.ssl ? 's': 
  * @param {string} bucket The bucket name (Default = picked from config.json)
  * @returns {Promise<savedFile>} The etag and url for the file saved
  */
-export const upload = function (object, filename = v4() + '.json' ,bucket = config.S3.bucket) {
+const upload = function (object, filename = v4() + '.json' ,bucket = config.S3.bucket) {
   return new Promise((resolve, reject) => {
     client.putObject(bucket, filename, JSON.stringify(object), function(err, etag) {
       if (err) return reject(err)
@@ -36,9 +36,15 @@ export const upload = function (object, filename = v4() + '.json' ,bucket = conf
  * @param {string} enc (Default = 'base64')
  * @returns {Promise<string>} the downloaded file encoded as specified
  */
-export const download = async function (url, enc = 'base64') {
+const download = async function (url, enc = 'base64') {
   if (!url) return ''
    
   const {data} = await axios.get(url)
   return Buffer.from(data).toString(enc)
+}
+
+module.exports = {
+  urlForFilename,
+  upload,
+  download
 }
