@@ -2,6 +2,7 @@ const Raven = require('raven');
 const models = require("../models");
 const services = require("../services/judge/");
 const config = require('../config/config.json')[process.env.NODE_ENV || "development"]
+const s3 = require('../util/s3')
 
 module.exports = {
   post: async (req, res, next) => {
@@ -47,12 +48,23 @@ module.exports = {
       if (req.query.code !== config.judge.secret) {
         return res.sendStatus(403);
       }
-      const { id, code, outputs } = req.body;
+      const { id, code, stderr, stdout, time } = req.body;
+
+      const output = {
+        id,
+        stderr,
+        stdout,
+        code,
+        time
+      }
+
+      // Upload to S3
+      const result = await s3.upload(output)
 
       const [updated] = await models.submission.update({ 
-        outputs, 
+        outputs: [result.url], 
         is_completed: true, 
-        is_successful: code === 200 
+        is_successful: code === 0 
       }, {
         where: { 
           judge_id: id, 

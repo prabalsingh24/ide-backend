@@ -8,6 +8,7 @@
     "sq": "./node_modules/.bin/sequelize"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "cross-env": "^5.1.6",
