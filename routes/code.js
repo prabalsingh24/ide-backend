@@ -19,7 +19,8 @@ router.get('/', passport.authenticate('bearer', {session: false}), (req, res, ne
       userId: req.user.id,
     },
     offset,
-    limit
+    limit,
+    order: [['updatedAt', 'DESC']] 
   }).then(({rows, count}) => {
     res.json({
       count,
