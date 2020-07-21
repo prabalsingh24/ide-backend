@@ -10,7 +10,7 @@ const express = require ('express'),
 
 router.get('/', passport.authenticate('bearer', {session: false}), (req, res, next) => {
   const offset = req.query.offset || 0
-  const limit = req.query.limit || 20
+  const limit = req.query.limit || 5
   const filter = JSON.parse(req.query.filter)
 
   DB.code.findAndCountAll({
@@ -22,6 +22,7 @@ router.get('/', passport.authenticate('bearer', {session: false}), (req, res, ne
     limit,
     order: [['updatedAt', 'DESC']] 
   }).then(({rows, count}) => {
+    console.log("aman",rows)
     res.json({
       count,
       codes: rows
