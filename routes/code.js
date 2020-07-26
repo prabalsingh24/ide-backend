@@ -12,8 +12,7 @@ router.get('/', passport.authenticate('bearer', {session: false}), (req, res, ne
   const offset = req.query.offset || 0
   const limit = req.query.limit || 5
   const filter = JSON.parse(req.query.filter)
-
-  DB.code.findAll({
+  DB.code.findAndCountAll({
     where: {
       ...filter,
       userId: req.user.id,
@@ -21,9 +20,15 @@ router.get('/', passport.authenticate('bearer', {session: false}), (req, res, ne
     offset,
     limit,
     order: [['updatedAt', 'DESC']] 
-  }).then(function(codes){
-    res.json ({codes: codes})
-  });
+  }).then(({rows, count}) => {
+    res.json({
+      count,
+      codes: rows
+    })
+  }).catch(err => {
+     Raven.captureException(err)
+    res.sendStatus(500)
+  })
 })
 
 router.get ('/:id', async (req, res, next) => {
