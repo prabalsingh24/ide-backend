@@ -54,7 +54,7 @@ router.get ('/:id', async (req, res, next) => {
 
 router.post('/', U.authenticateOrPass, async (req, res, next) => {
   try {
-    const {id, language, code, customInput, filename} = req.body
+    const {id, language, code, customInput, fileName} = req.body
     const title = req.body.title || 'Untitled'
   
     if (id && req.user.id) {
@@ -67,7 +67,7 @@ router.post('/', U.authenticateOrPass, async (req, res, next) => {
         dbCode.set("language", language)
         dbCode.set("code", code)
         dbCode.set("custom_input", customInput)
-        dbCode.set("file_name", filename)
+        dbCode.set("file_name", fileName)
         dbCode.set("title", title)
         await dbCode.save()
         // save to minio
@@ -83,7 +83,7 @@ router.post('/', U.authenticateOrPass, async (req, res, next) => {
       title,
       code: '',
       custom_input: customInput,
-      file_name: filename,
+      file_name: fileName,
       userId: req.user ? req.user.id : null
     }, {
       returning: true
