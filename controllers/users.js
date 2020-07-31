@@ -57,11 +57,11 @@ module.exports = {
         });
         res.json({"token":tokenrow[0].clienttoken});
       } catch (error) {
-        Raven.captureException(err)
+        Raven.captureException(error)
         res.status(401).send("Unauthorised");
       }
     } catch (error) {
-      Raven.captureException(err)
+      Raven.captureException(error)
       res.status(401).send("Unauthorised");
     }
   },
