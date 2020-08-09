@@ -38,6 +38,26 @@ util/ – Contains database and environment configuration files
 public/ – Contains assets served along with the webpages
 ````
 
+### Set up on Docker
+Create the docker image for the ide-backend from the Dockerfile
+```terminal
+docker build -t ide-backend .
+```
+
+Run this image in a container using the docker-compose file
+
+-To run in terminal and follow
+```
+docker-compose up ide-backend
+```
+-To run as background process
+```
+docker-compose up -d ide-backend
+```
+Port 3000 in docker is mapped with localhost:3000 so you can run this app from localhost:3000.
+
+If you wish to run other apps such as [ide frontend](https://github.com/coding-blocks/ide) or [judge api](https://github.com/coding-blocks/judge-api) with this, connect this docker container with those via docker network - 'ide-backend-network'. Check the docker file for more details.
+
 ### Further Reading
 
 [express.js]("https://expressjs.com/")
