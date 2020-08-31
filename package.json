@@ -19,6 +19,7 @@
     "express-rate-limit": "^5.0.0",
     "jade": "~1.11.0",
     "minio": "^7.0.3",
+    "moment": "^2.27.0",
     "morgan": "~1.8.1",
     "newrelic": "^6.5.0",
     "passport": "^0.4.0",
