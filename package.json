@@ -17,6 +17,7 @@
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "express-rate-limit": "^5.0.0",
+    "hubspot": "^2.3.13",
     "jade": "~1.11.0",
     "minio": "^7.0.3",
     "moment": "^2.27.0",
