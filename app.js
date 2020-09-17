@@ -11,6 +11,7 @@ const passportConf = require ('./passport');
 const index = require ('./routes/index');
 const users = require ('./routes/users');
 const code = require ('./routes/code');
+const codePair = require('./routes/code-pair');
 const run = require ('./routes/run');
 const submissions = require('./controllers/submissions');
 
@@ -51,6 +52,7 @@ app.use ('/', index);
 app.use ('/run', run);
 app.use ('/users', users);
 app.use ('/code', code);
+app.use('/code_pair', codePair)
 
 app.use ('/.well-known', express.static (path.join (__dirname, '.well-known')));
 
