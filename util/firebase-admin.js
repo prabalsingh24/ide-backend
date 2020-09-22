@@ -4,11 +4,11 @@ const serviceAccount = config.firebaseAdminSdk
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://cd-ide-prabal-b9a4c.firebaseio.com"
-})
+    databaseURL: config.firebaseDatabaseURL
+});
 
-const db = admin.database()
+const db = admin.database();
 
-const ref = db.ref("codePair");
+const ref = db.ref();
 
-module.exports = ref
+module.exports = ref;
